@@ -1,0 +1,22 @@
+# 비공개 자료: 계좌·증권사·원본 데이터
+private/
+
+# 원본 docx (변환된 .qmd만 공개)
+sources/**/*.docx
+sources/**/*.pdf
+
+# 원본 엑셀/노트북이 실수로 들어오는 것 방지
+*.xlsx
+*.xls
+.ipynb_checkpoints/
+
+# Quarto 빌드 결과 (GitHub Actions가 다시 만듦)
+/_site/
+/.quarto/
+books/progress.json
+
+.DS_Store
+__pycache__/
+
+**/*.quarto_ipynb
+

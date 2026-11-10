@@ -1,0 +1,31 @@
+/*-- scss:defaults --*/
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+$font-family-sans-serif: "Noto Sans KR", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+$font-size-root: 17px;
+$line-height-base: 1.75;
+
+/*-- scss:rules --*/
+body { word-break: keep-all; }
+
+h2 { margin-top: 2.2rem; }
+
+/* wide grid tables in the book notes scroll instead of overflowing */
+main table { display: block; overflow-x: auto; }
+main table td, main table th { vertical-align: top; }
+
+/* "내 생각" section stands out a little */
+section[id^="내-생각"], section[id*="내-생각"] {
+  border-left: 4px solid var(--bs-primary);
+  padding-left: 1rem;
+}
+
+.home-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 900px) { .home-grid { grid-template-columns: 1fr 1fr; } }
+
+.progress-row { margin-bottom: .75rem; }
+.progress-row .label { display: flex; justify-content: space-between; font-size: .95rem; }
+.progress-bar-wrap { height: .6rem; background: rgba(127,127,127,.2); border-radius: .3rem; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--bs-primary); }
+
+.empty-note { color: var(--bs-secondary-color, #888); font-style: italic; }

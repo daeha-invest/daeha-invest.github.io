@@ -1,0 +1,63 @@
+project:
+  type: website
+  output-dir: _site
+  pre-render: python3 scripts/progress.py      # 공부 진행 현황(books/progress.json) 생성
+  render:
+    - "*.qmd"
+    - "books/**/*.qmd"
+    - "strategies/**/*.qmd"
+    - "strategies/notebooks/*.ipynb"
+    - "journal/*.qmd"
+    - "!sources/"
+    - "!private/"
+    - "!README.md"
+    - "!DEPLOY.md"
+  resources:
+    - "data/trades.csv"
+    - "data/allocation.csv"
+    - "data/returns.csv"
+    - "books/progress.json"
+
+lang: ko
+
+website:
+  title: "투자 공부 노트"
+  site-url: https://daeha-invest.github.io
+  search:
+    location: navbar
+    type: overlay
+  page-navigation: true
+  back-to-top-navigation: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: 홈
+      - href: books/index.qmd
+        text: 책 노트
+      - href: strategies/index.qmd
+        text: 투자 전략
+      - href: journal/index.qmd
+        text: 투자일지
+      - href: dashboard.qmd
+        text: 대시보드
+  page-footer:
+    center: "개인 공부 기록입니다. 투자 권유가 아니며, 투자 금액은 기록하지 않습니다."
+
+format:
+  html:
+    theme:
+      light: [flatly, styles/custom.scss]
+      dark: [darkly, styles/custom.scss, styles/dark.scss]
+    toc: true
+    toc-title: "목차"
+    number-sections: false
+    html-math-method: mathjax
+    respect-user-color-scheme: true
+    code-fold: true
+    code-summary: "코드 보기"
+    smooth-scroll: true
+    link-external-newwindow: true
+
+execute:
+  freeze: auto      # 코드는 로컬에서 한 번만 실행되고, 배포 때는 저장된 결과만 사용
+  echo: false

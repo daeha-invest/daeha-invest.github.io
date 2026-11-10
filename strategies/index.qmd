@@ -1,0 +1,21 @@
+---
+title: "투자 이론과 전략"
+description: "운용 중인 전략의 규칙, 근거, 백테스트 결과, 변경 이력"
+toc: false
+listing:
+  contents: "*.qmd"
+  type: table
+  sort: "order"
+  fields: [title, description, rebalancing, date-modified]
+  field-display-names:
+    title: "전략"
+    description: "요약"
+    rebalancing: "리밸런싱"
+    date-modified: "수정일"
+  date-format: "YYYY-MM-DD"
+  sort-ui: false
+  filter-ui: false
+---
+
+전략마다 페이지 하나에 **규칙 · 근거 · 백테스트 결과 · 변경 이력**을 정리합니다.
+노트북은 실행하지 않고 저장된 출력만 보여 줍니다. 공개용 정리본에서는 투자금 관련 값을 지웠습니다.

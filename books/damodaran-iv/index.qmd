@@ -1,0 +1,23 @@
+---
+title: "Investment Valuation"
+subtitle: "Aswath Damodaran · 4th ed. (University Edition)"
+description: "다모다란의 가치평가 교과서를 장별로 정리한 노트"
+# total-chapters: 34     # 전체 장 수를 적으면 홈에 진행률 막대가 나옵니다
+toc: false
+listing:
+  contents: "ch*.qmd"
+  type: table
+  sort: "chapter"
+  fields: [title, subtitle, date, my-thoughts]
+  field-display-names:
+    title: "장"
+    subtitle: "부제"
+    date: "정리한 날"
+    my-thoughts: "내 생각"
+  date-format: "YYYY-MM-DD"
+  sort-ui: false
+  filter-ui: false
+---
+
+각 장은 핵심 내용 요약과 직접 채우는 **내 생각** 섹션으로 이루어져 있습니다.
+내 생각을 채운 장은 머리말의 `my-thoughts`를 `true`로 바꾸면 홈의 진행 현황에 반영됩니다.

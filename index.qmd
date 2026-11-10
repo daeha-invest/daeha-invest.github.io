@@ -1,0 +1,74 @@
+---
+title: "투자 공부 노트"
+subtitle: "책 공부, 투자 전략, 투자일지를 한곳에 기록합니다"
+toc: false
+listing:
+  id: recent-journal
+  contents: "journal/2*.qmd"
+  sort: "date desc"
+  max-items: 5
+  type: table
+  fields: [date, title, categories]
+  field-display-names:
+    date: "날짜"
+    title: "제목"
+    categories: "태그"
+  date-format: "YYYY-MM-DD"
+  sort-ui: false
+  filter-ui: false
+---
+
+## 최근 투자일지
+
+::: {#recent-journal}
+:::
+
+[전체 일지 보기 →](journal/index.qmd)
+
+::: {.home-grid}
+::: {}
+## 현재 자산배분
+
+```{ojs}
+allocRaw = FileAttachment("data/allocation.csv").csv()
+assetCols = (allocRaw.columns ?? []).filter(c => c !== "날짜")
+latest = allocRaw.length ? [...allocRaw].sort((a, b) => b["날짜"].localeCompare(a["날짜"]))[0] : null
+latestRows = latest ? assetCols.map(k => ({자산군: k, 비중: +latest[k]})).filter(d => !isNaN(d.비중)) : []
+```
+
+```{ojs}
+latest
+  ? html`<p>기준일 <strong>${latest["날짜"]}</strong> · 비중(%)만 기록합니다.</p>
+         ${Plot.plot({
+           x: {domain: [0, 100], label: "비중 (%)", grid: true},
+           y: {label: null, domain: assetCols},
+           color: {legend: false},
+           width: 420, marginLeft: 80, marginRight: 40, height: 34 * assetCols.length + 50,
+           marks: [
+             Plot.barX(latestRows, {x: "비중", y: "자산군", fill: "자산군"}),
+             Plot.text(latestRows, {x: "비중", y: "자산군", text: d => `${d.비중}%`, dx: 20}),
+             Plot.ruleX([0])
+           ]})}`
+  : html`<p class="empty-note">아직 기록된 자산배분이 없습니다. data/allocation.csv에 한 줄을 추가하세요.</p>`
+```
+:::
+
+::: {}
+## 공부 진행 현황
+
+```{ojs}
+progress = FileAttachment("books/progress.json").json()
+html`${progress.books.map(b => {
+  const done = b.total_chapters ? b.summarized / b.total_chapters * 100 : null;
+  const mine = b.summarized ? b.my_thoughts / b.summarized * 100 : 0;
+  return html`<div class="progress-row">
+    <div class="label"><a href="${b.href}">${b.title}</a>
+      <span>요약 ${b.summarized}${b.total_chapters ? ` / ${b.total_chapters}` : ""}장</span></div>
+    ${done !== null ? html`<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${done}%"></div></div>` : ""}
+    <div class="label" style="margin-top:.4rem"><span>내 생각 작성</span><span>${b.my_thoughts} / ${b.summarized}장</span></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${mine}%"></div></div>
+  </div>`;
+})}`
+```
+:::
+:::

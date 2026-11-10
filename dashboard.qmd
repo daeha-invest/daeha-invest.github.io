@@ -1,0 +1,72 @@
+---
+title: "대시보드"
+description: "자산군 비중 추이와 전략별 수익률(%). 금액은 다루지 않습니다."
+toc: false
+---
+
+```{ojs}
+// 아래 열만 읽습니다. CSV에 다른 열이 있어도 화면에 나오지 않습니다.
+allocRaw = FileAttachment("data/allocation.csv").csv()
+assetCols = (allocRaw.columns ?? []).filter(c => c !== "날짜")
+allocLong = allocRaw.flatMap(r => assetCols.map(k => ({
+  날짜: new Date(r["날짜"]), 자산군: k, 비중: +r[k]
+}))).filter(d => !isNaN(d.비중) && !isNaN(d.날짜))
+
+returnsRaw = FileAttachment("data/returns.csv").csv()
+returns = returnsRaw.map(r => ({
+  기준일: r["기준일"], 전략: r["전략"], 구간: r["구간"],
+  "수익률(%)": r["수익률_pct"] === "" ? null : +r["수익률_pct"],
+  비교지수: r["비교지수"],
+  "비교지수(%)": r["비교지수_pct"] === "" ? null : +r["비교지수_pct"]
+})).map(r => ({...r, "초과(%p)": (r["수익률(%)"] ?? NaN) - (r["비교지수(%)"] ?? NaN)}))
+
+tradesRaw = FileAttachment("data/trades.csv").csv()
+trades = tradesRaw.map(r => ({
+  날짜: r["날짜"], 전략: r["전략"], 종목: r["종목"], 구분: r["매수매도"],
+  "비중변화(%p)": r["비중변화_pp"] === "" ? null : +r["비중변화_pp"], 사유: r["사유"]
+})).sort((a, b) => b.날짜.localeCompare(a.날짜))
+
+empty = (msg) => html`<p class="empty-note">${msg}</p>`
+fmt = (v) => v === null || isNaN(v) ? "" : v.toFixed(2)
+```
+
+## 자산군 비중 추이
+
+```{ojs}
+allocLong.length
+  ? Plot.plot({
+      height: 340,
+      y: {domain: [0, 100], label: "비중 (%)", grid: true},
+      x: {label: null, tickFormat: "%Y-%m", ticks: 6},
+      color: {legend: true, domain: assetCols},
+      marks: [
+        Plot.areaY(allocLong, {x: "날짜", y: "비중", fill: "자산군", curve: "step-after", tip: true}),
+        Plot.ruleY([0])
+      ]
+    })
+  : empty("아직 기록이 없습니다. data/allocation.csv에 날짜별 비중(%)을 추가하세요.")
+```
+
+## 전략별 수익률 (%)
+
+```{ojs}
+returns.length
+  ? Inputs.table(returns, {
+      sort: "기준일", reverse: true, rows: 15,
+      format: {"수익률(%)": fmt, "비교지수(%)": fmt, "초과(%p)": fmt}
+    })
+  : empty("아직 기록이 없습니다. data/returns.csv에 전략별 구간 수익률(%)을 추가하세요.")
+```
+
+## 매매 기록 (비중 변화)
+
+```{ojs}
+viewof stratPick = Inputs.select(["전체", ...new Set(trades.map(d => d.전략))], {label: "전략"})
+```
+
+```{ojs}
+tradesShown = stratPick === "전체" ? trades : trades.filter(d => d.전략 === stratPick)
+trades.length
+  ? Inputs.table(tradesShown, {rows: 20, format: {"비중변화(%p)": fmt}})
+  : empty("아직 기록이 없습니다. data/trades.csv에 매매를 추가하세요.")
+```

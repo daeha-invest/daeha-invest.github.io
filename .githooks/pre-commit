@@ -1,0 +1,10 @@
+#!/bin/sh
+# 커밋 전에 data/ 와 journal/ 에서 금액처럼 보이는 패턴을 찾습니다.
+# 활성화(한 번만): git config core.hooksPath .githooks
+files=$(git diff --cached --name-only --diff-filter=ACMR -- data journal)
+[ -z "$files" ] && exit 0
+python3 scripts/check_amounts.py --staged $files || {
+  echo ""
+  echo "커밋을 멈췄습니다. 위 내용을 확인하세요."
+  exit 1
+}
