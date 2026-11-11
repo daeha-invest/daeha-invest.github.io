@@ -1,5 +1,14 @@
 /*-- scss:defaults --*/
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+// brand: Quant & Current (slate + teal)
+$brand-slate: #33434c;
+$brand-teal: #4aaca2;
+$brand-ink: $brand-slate !default;          // wordmark color (dark theme overrides)
+$brand-teal-ink: #2f8a80 !default;          // teal readable on white
+$navbar-bg: $brand-slate;
+$link-color: $brand-teal-ink !default;
+$primary: $brand-teal-ink !default;
 
 $font-family-sans-serif: "Noto Sans KR", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 $font-size-root: 17px;
@@ -7,6 +16,24 @@ $line-height-base: 1.75;
 
 /*-- scss:rules --*/
 body { word-break: keep-all; }
+
+/* brand */
+.navbar-title { font-family: "Montserrat", sans-serif; font-weight: 600; letter-spacing: -.01em; }
+.navbar-logo { height: 30px; width: auto; max-height: 30px; }
+
+.brand-hero {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+.brand-mark { width: clamp(56px, 14vw, 84px); height: auto; flex: none; color: $brand-ink; }
+.brand-teal { stroke: $brand-teal; }
+.brand-word {
+  font-family: "Montserrat", sans-serif; font-weight: 600;
+  font-size: clamp(1.5rem, 6.8vw, 3rem); line-height: 1.1; letter-spacing: -.02em;
+  color: $brand-ink; margin: 0; border: 0; padding: 0;
+}
+.brand-amp { font-weight: 400; }
+.brand-tagline { margin: .35rem 0 0; color: var(--bs-secondary-color, #6c757d); font-size: .98rem; }
 
 h2 { margin-top: 2.2rem; }
 
@@ -29,3 +56,9 @@ section[id^="내-생각"], section[id*="내-생각"] {
 .progress-bar-fill { height: 100%; background: var(--bs-primary); }
 
 .empty-note { color: var(--bs-secondary-color, #888); font-style: italic; }
+
+@media (max-width: 575.98px) {
+  .navbar-title { font-size: 1.05rem; }
+  .navbar-logo { height: 26px; max-height: 26px; }
+  .brand-hero { gap: .75rem; }
+}

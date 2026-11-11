@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="110" viewBox="0 0 560 110" role="img" aria-label="Quant &amp; Current">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&amp;display=swap');
+    .w { font-family: Montserrat, "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 54px; fill: #33434c; letter-spacing: -0.5px; }
+    .a { font-weight: 400; fill: #33434c; }
+  </style>
+  <g transform="translate(5,5)">
+    <circle cx="45.5" cy="45.5" r="31" fill="none" stroke="#33434c" stroke-width="11"/>
+    <line x1="66" y1="70" x2="79" y2="86.5" stroke="#33434c" stroke-width="13" stroke-linecap="round"/>
+    <path d="M57.02 35.13 A15.5 15.5 0 1 0 57.02 55.87" fill="none" stroke="#4aaca2" stroke-width="10.5"/>
+  </g>
+  <text x="112" y="68" class="w">Quant <tspan class="a">&amp;</tspan> Current</text>
+</svg>

@@ -1,6 +1,5 @@
 ---
-title: "투자 공부 노트"
-subtitle: "책 공부, 투자 전략, 투자일지를 한곳에 기록합니다"
+pagetitle: "투자 공부 노트"
 toc: false
 listing:
   id: recent-journal
@@ -17,6 +16,20 @@ listing:
   sort-ui: false
   filter-ui: false
 ---
+
+```{=html}
+<header class="brand-hero">
+  <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
+    <circle cx="45.5" cy="45.5" r="31" fill="none" stroke="currentColor" stroke-width="11"/>
+    <line x1="66" y1="70" x2="79" y2="86.5" stroke="currentColor" stroke-width="13" stroke-linecap="round"/>
+    <path d="M57.02 35.13 A15.5 15.5 0 1 0 57.02 55.87" fill="none" class="brand-teal" stroke-width="10.5"/>
+  </svg>
+  <div>
+    <p class="brand-word" role="heading" aria-level="1">Quant <span class="brand-amp">&amp;</span> Current</p>
+    <p class="brand-tagline">투자 공부 노트 · 책 공부, 투자 전략, 투자일지를 한곳에 기록합니다</p>
+  </div>
+</header>
+```
 
 ## 최근 투자일지
 

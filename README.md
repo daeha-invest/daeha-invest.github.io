@@ -1,4 +1,4 @@
-# 투자 공부 노트 (daeha-invest.github.io)
+# Quant & Current (daeha-invest.github.io)
 
 Quarto 웹사이트입니다. 책 공부 노트, 투자 전략, 투자일지, 대시보드로 구성됩니다.
 **투자 금액은 어디에도 기록하지 않습니다.** 비중(%)과 수익률(%)만 씁니다.

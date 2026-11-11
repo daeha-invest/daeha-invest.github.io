@@ -21,14 +21,18 @@ project:
 lang: ko
 
 website:
-  title: "투자 공부 노트"
+  title: "Quant & Current"
+  description: "투자 공부 노트: 책, 전략, 투자일지"
   site-url: https://daeha-invest.github.io
+  favicon: images/favicon.png
   search:
     location: navbar
     type: overlay
   page-navigation: true
   back-to-top-navigation: true
   navbar:
+    logo: images/logo-mark-light.svg
+    logo-alt: "Quant & Current 로고"
     left:
       - href: index.qmd
         text: 홈
