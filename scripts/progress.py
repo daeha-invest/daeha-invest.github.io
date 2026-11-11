@@ -52,8 +52,20 @@ def main():
             "my_thoughts": sum(c["my_thoughts"] for c in chapters),
             "chapters": chapters,
         })
+    def published(pattern):
+        return [p for p in sorted(ROOT.glob(pattern)) if front_matter(p).get("draft") is not True]
+
+    hyps = published("hypotheses/2*.qmd")
+    counts = {
+        "chapters": sum(b["summarized"] for b in books),
+        "my_thoughts": sum(b["my_thoughts"] for b in books),
+        "strategies": len([p for p in ROOT.glob("strategies/*.qmd") if p.name != "index.qmd"]),
+        "journal": len(published("journal/2*.qmd")),
+        "hypotheses": len(hyps),
+        "hypotheses_open": sum(1 for p in hyps if front_matter(p).get("status", "진행 중") == "진행 중"),
+    }
     out = ROOT / "books" / "progress.json"
-    out.write_text(json.dumps({"books": books}, ensure_ascii=False, indent=1), encoding="utf-8")
+    out.write_text(json.dumps({"books": books, "counts": counts}, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 if __name__ == "__main__":

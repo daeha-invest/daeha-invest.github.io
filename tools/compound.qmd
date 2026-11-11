@@ -1,0 +1,57 @@
+---
+title: "복리·목표 수익률"
+description: "연 수익률과 기간으로 몇 배가 되는지, 목표 배수에 필요한 연 수익률은 얼마인지"
+toc: false
+---
+
+금액 대신 **배수**와 **수익률(%)**로만 계산합니다.
+
+## 몇 배가 될까
+
+```{ojs}
+viewof cagr = Inputs.range([-20, 40], {value: 8, step: 0.1, label: "연평균 수익률 (%)"})
+viewof years = Inputs.range([1, 40], {value: 20, step: 1, label: "기간 (년)"})
+viewof infl = Inputs.range([0, 6], {value: 2, step: 0.1, label: "물가상승률 (%)"})
+```
+
+```{ojs}
+mult = (1 + cagr / 100) ** years
+real = ((1 + cagr / 100) / (1 + infl / 100)) ** years
+html`<div class="stat-strip">
+  <div class="stat-tile"><div class="stat-value">${mult.toFixed(2)}배</div><div class="stat-label">명목 배수</div><div class="stat-sub">총수익률 ${((mult - 1) * 100).toFixed(0)}%</div></div>
+  <div class="stat-tile"><div class="stat-value">${real.toFixed(2)}배</div><div class="stat-label">실질 배수</div><div class="stat-sub">물가 ${infl}% 차감</div></div>
+  <div class="stat-tile"><div class="stat-value">${cagr > 0 ? (Math.log(2) / Math.log(1 + cagr / 100)).toFixed(1) + "년" : "—"}</div><div class="stat-label">두 배까지</div><div class="stat-sub">72의 법칙 ≈ ${cagr > 0 ? (72 / cagr).toFixed(1) + "년" : "—"}</div></div>
+</div>`
+```
+
+```{ojs}
+path = d3.range(0, years + 1).flatMap(t => [
+  {연: t, 배수: (1 + cagr / 100) ** t, 구분: "명목"},
+  {연: t, 배수: ((1 + cagr / 100) / (1 + infl / 100)) ** t, 구분: "실질"}
+])
+Plot.plot({
+  height: 260, x: {label: "연"}, y: {label: "배수", grid: true},
+  color: {legend: true, domain: ["명목", "실질"], range: ["#2f8a80", "#9aa5ab"]},
+  marks: [Plot.line(path, {x: "연", y: "배수", stroke: "구분", strokeWidth: 2}), Plot.ruleY([1])]
+})
+```
+
+## 목표 배수에 필요한 연 수익률
+
+```{ojs}
+viewof target = Inputs.range([1.1, 20], {value: 3, step: 0.1, label: "목표 배수"})
+viewof tyears = Inputs.range([1, 40], {value: 15, step: 1, label: "기간 (년)"})
+```
+
+```{ojs}
+need = (target ** (1 / tyears) - 1) * 100
+html`<div class="calc-result">필요한 연평균 수익률 = <strong>${need.toFixed(2)}%</strong></div>`
+```
+
+## 손실과 회복
+
+떨어진 만큼 다시 오르는 데는 더 큰 수익률이 필요합니다. 최대낙폭(MDD)을 볼 때 함께 떠올리면 좋습니다.
+
+```{ojs}
+Inputs.table([10, 20, 30, 40, 50, 60, 70].map(l => ({"하락 (%)": `−${l}%`, "회복에 필요한 상승 (%)": `+${(l / (100 - l) * 100).toFixed(1)}%`})), {layout: "auto"})
+```

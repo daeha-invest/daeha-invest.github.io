@@ -2,19 +2,31 @@
 pagetitle: "투자 공부 노트"
 toc: false
 listing:
-  id: recent-journal
-  contents: "journal/2*.qmd"
-  sort: "date desc"
-  max-items: 5
-  type: table
-  fields: [date, title, categories]
-  field-display-names:
-    date: "날짜"
-    title: "제목"
-    categories: "태그"
-  date-format: "YYYY-MM-DD"
-  sort-ui: false
-  filter-ui: false
+  - id: recent-journal
+    contents: "journal/2*.qmd"
+    sort: "date desc"
+    max-items: 5
+    type: table
+    fields: [date, title, categories]
+    field-display-names:
+      date: "날짜"
+      title: "제목"
+      categories: "태그"
+    date-format: "YYYY-MM-DD"
+    sort-ui: false
+    filter-ui: false
+  - id: recent-notes
+    contents: ["books/*/ch*.qmd", "hypotheses/2*.qmd"]
+    sort: "date desc"
+    max-items: 5
+    type: table
+    fields: [date, title]
+    field-display-names:
+      date: "날짜"
+      title: "제목"
+    date-format: "YYYY-MM-DD"
+    sort-ui: false
+    filter-ui: false
 ---
 
 ```{=html}
@@ -26,17 +38,71 @@ listing:
   </svg>
   <div>
     <p class="brand-word" role="heading" aria-level="1">Quant <span class="brand-amp">&amp;</span> Current</p>
-    <p class="brand-tagline">투자 공부 노트 · 책 공부, 투자 전략, 투자일지를 한곳에 기록합니다</p>
+    <p class="brand-tagline">숫자로 확인하고, 흐름을 기록합니다 · 책 공부, 투자 전략, 투자일지</p>
   </div>
 </header>
 ```
 
+```{ojs}
+//| output: false
+progress = FileAttachment("books/progress.json").json()
+import {upcoming, fmt} from "./js/schedule.js"
+nextEvents = upcoming(new Date(), 3)
+nextEvent = nextEvents[0]
+nextNames = nextEvents.filter(e => +e.date === +nextEvent.date).map(e => e.short).join(" · ")
+```
+
+```{ojs}
+html`<div class="stat-strip">
+  <a class="stat-tile" href="books/index.html"><div class="stat-value">${progress.counts.chapters}<small>장</small></div>
+    <div class="stat-label">공부한 장</div><div class="stat-sub">내 생각 ${progress.counts.my_thoughts}장</div></a>
+  <a class="stat-tile" href="strategies/index.html"><div class="stat-value">${progress.counts.strategies}<small>개</small></div>
+    <div class="stat-label">운용 전략</div><div class="stat-sub">규칙 · 근거 · 백테스트</div></a>
+  <a class="stat-tile" href="journal/index.html"><div class="stat-value">${progress.counts.journal}<small>편</small></div>
+    <div class="stat-label">투자일지</div><div class="stat-sub">가설 ${progress.counts.hypotheses}개 (진행 중 ${progress.counts.hypotheses_open})</div></a>
+  <a class="stat-tile" href="tools/calendar.html"><div class="stat-value">D-${nextEvent.days}</div>
+    <div class="stat-label">다음 리밸런싱</div><div class="stat-sub">${nextNames} · ${fmt(nextEvent.date).slice(5)}</div></a>
+</div>`
+```
+
+## 무엇이 있나요
+
+```{=html}
+<div class="card-grid">
+  <a class="feature-card" href="books/index.html"><i class="bi bi-book"></i>
+    <h3>책 공부</h3><p>다모다란 가치평가 교과서를 장별로 요약하고 내 생각을 덧붙입니다.</p></a>
+  <a class="feature-card" href="books/glossary.html"><i class="bi bi-journal-text"></i>
+    <h3>용어집</h3><p>WACC, ERP, 베타, TTM… 책에 나온 핵심 용어를 한두 줄로 찾아봅니다.</p></a>
+  <a class="feature-card" href="strategies/index.html"><i class="bi bi-diagram-3"></i>
+    <h3>투자 전략</h3><p>한국 소형주 퀀트, 미국 PSR, HAA. 규칙과 근거, 백테스트, 변경 이력.</p></a>
+  <a class="feature-card" href="journal/index.html"><i class="bi bi-pencil-square"></i>
+    <h3>투자일지</h3><p>판단, 시장 메모, 반성. 금액 없이 비중과 이유만 기록합니다.</p></a>
+  <a class="feature-card" href="hypotheses/index.html"><i class="bi bi-lightbulb"></i>
+    <h3>투자 가설</h3><p>기한과 판단 기준을 정해 둔 가설. 나중에 맞았는지 확인합니다.</p></a>
+  <a class="feature-card" href="tools/index.html"><i class="bi bi-tools"></i>
+    <h3>도구</h3><p>리밸런싱, DCF, WACC, 복리 계산기와 운용 캘린더.</p></a>
+</div>
+```
+
+::: {.home-grid}
+::: {}
 ## 최근 투자일지
 
 ::: {#recent-journal}
 :::
 
-[전체 일지 보기 →](journal/index.qmd)
+[전체 일지 →](journal/index.qmd)
+:::
+
+::: {}
+## 최근 공부·가설
+
+::: {#recent-notes}
+:::
+
+[책 노트 →](books/index.qmd) · [가설 →](hypotheses/index.qmd)
+:::
+:::
 
 ::: {.home-grid}
 ::: {}
@@ -70,7 +136,6 @@ latest
 ## 공부 진행 현황
 
 ```{ojs}
-progress = FileAttachment("books/progress.json").json()
 html`${progress.books.map(b => {
   const done = b.total_chapters ? b.summarized / b.total_chapters * 100 : null;
   const mine = b.summarized ? b.my_thoughts / b.summarized * 100 : 0;

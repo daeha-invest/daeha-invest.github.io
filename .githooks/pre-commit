@@ -1,7 +1,7 @@
 #!/bin/sh
-# 커밋 전에 data/ 와 journal/ 에서 금액처럼 보이는 패턴을 찾습니다.
+# 커밋 전에 data/, journal/, hypotheses/ 에서 금액처럼 보이는 패턴을 찾습니다.
 # 활성화(한 번만): git config core.hooksPath .githooks
-files=$(git diff --cached --name-only --diff-filter=ACMR -- data journal)
+files=$(git diff --cached --name-only --diff-filter=ACMR -- data journal hypotheses)
 [ -z "$files" ] && exit 0
 python3 scripts/check_amounts.py --staged $files || {
   echo ""

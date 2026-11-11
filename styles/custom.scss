@@ -62,3 +62,53 @@ section[id^="내-생각"], section[id*="내-생각"] {
   .navbar-logo { height: 26px; max-height: 26px; }
   .brand-hero { gap: .75rem; }
 }
+
+/* number tiles (home, calendar, compound) */
+.stat-strip {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .75rem; margin: .5rem 0 1.75rem;
+}
+.stat-tile {
+  display: block; padding: .9rem 1rem; border-radius: .6rem;
+  border: 1px solid rgba(127,127,127,.22); background: rgba(74,172,162,.06);
+  color: inherit; text-decoration: none; transition: border-color .15s, transform .15s;
+}
+a.stat-tile:hover { border-color: $brand-teal; transform: translateY(-1px); }
+.stat-value { font-family: "Montserrat", sans-serif; font-weight: 600; font-size: 1.7rem; line-height: 1.15; color: $brand-ink; }
+.stat-value small { font-size: .55em; font-weight: 600; margin-left: .15em; opacity: .7; }
+.stat-label { font-weight: 600; font-size: .92rem; margin-top: .2rem; }
+.stat-sub { font-size: .8rem; opacity: .7; }
+
+/* feature cards */
+.card-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .9rem; margin: .5rem 0 1.5rem;
+}
+.feature-card {
+  display: block; padding: 1.1rem 1.1rem 1rem; border-radius: .7rem;
+  border: 1px solid rgba(127,127,127,.22); color: inherit; text-decoration: none;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+.feature-card:hover { border-color: $brand-teal; box-shadow: 0 4px 14px rgba(0,0,0,.08); transform: translateY(-2px); }
+.feature-card i { font-size: 1.5rem; color: $brand-teal; }
+.feature-card h3 { font-size: 1.05rem; margin: .5rem 0 .3rem; font-weight: 700; }
+.feature-card p { font-size: .9rem; margin: 0; opacity: .8; line-height: 1.55; }
+
+/* calculators */
+.calc-result {
+  margin: .6rem 0 1.2rem; padding: .8rem 1rem; border-radius: .5rem;
+  border-left: 4px solid $brand-teal; background: rgba(74,172,162,.08); font-size: 1.05rem;
+}
+.calc-result strong { font-family: "Montserrat", sans-serif; font-size: 1.25em; color: $brand-ink; }
+.muted-note { opacity: .7; font-size: .9rem; }
+.warn-note { color: #c0504d; font-size: .95rem; }
+.rb-row { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin: .25rem 0; }
+.rb-row span { font-size: .85rem; opacity: .7; }
+.rb-row form { margin: 0; }
+
+/* footer */
+.nav-footer { font-size: .85rem; }
+.nav-footer a { text-decoration: none; }
+
+/* wide display equations scroll instead of widening the page on phones */
+mjx-container[display="true"] { display: block; max-width: 100%; overflow-x: auto; overflow-y: hidden; }

@@ -1,0 +1,26 @@
+---
+title: "투자 가설"
+description: "가설을 세우고, 기한과 판단 기준을 정해 두고, 나중에 맞았는지 확인합니다."
+toc: false
+listing:
+  contents: "2*.qmd"
+  type: table
+  sort: "date desc"
+  fields: [date, title, status, deadline, confidence, categories]
+  field-display-names:
+    date: "세운 날"
+    title: "가설"
+    status: "결과"
+    deadline: "검증 기한"
+    confidence: "확신(%)"
+    categories: "태그"
+  date-format: "YYYY-MM-DD"
+  filter-ui: true
+  sort-ui: [date, deadline, status]
+  categories: true
+---
+
+가설마다 **검증 기한**과 **무엇이 일어나면 맞고 틀린지**를 미리 적어 둡니다. 기한이 지나면 결과를 `진행 중`에서 `맞음`·`틀림`·`보류` 중 하나로 바꾸고, 배운 점을 남깁니다.
+목록 위 검색창에 `맞음`, `틀림`, `진행 중`을 입력하면 결과별로 볼 수 있습니다.
+
+새 가설: `./scripts/new_hypothesis.sh "가설 한 줄"`

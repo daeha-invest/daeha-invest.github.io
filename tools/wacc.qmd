@@ -1,0 +1,77 @@
+---
+title: "WACC 계산기"
+description: "CAPM 자기자본비용, 세후 부채비용, 시장가치 가중치로 자본비용 계산 (다모다란 7·8장)"
+---
+
+관련 내용: [7장 무위험이자율과 위험프리미엄](../books/damodaran-iv/ch07.qmd), [8장 위험 모수와 자본비용](../books/damodaran-iv/ch08.qmd).
+
+## 1. 베타: 무부채 베타에서 레버리지 베타로
+
+$$\beta_L = \beta_U\,\big[1 + (1 - t)\,(D/E)\big]$$
+
+```{ojs}
+viewof betaU = Inputs.range([0.2, 2.5], {value: 0.9, step: 0.01, label: "무부채 베타 βU"})
+viewof de = Inputs.range([0, 200], {value: 20, step: 0.5, label: "부채/자기자본 D/E (%)"})
+viewof tax = Inputs.range([0, 40], {value: 24, step: 0.5, label: "한계세율 t (%)"})
+```
+
+```{ojs}
+betaL = betaU * (1 + (1 - tax / 100) * de / 100)
+html`<div class="calc-result">레버리지 베타 βL = <strong>${betaL.toFixed(3)}</strong></div>`
+```
+
+## 2. 자기자본비용과 부채비용
+
+$$k_e = R_f + \beta_L \times \text{ERP} + \lambda \times \text{CRP}$$
+
+$$k_d^{\text{세후}} = (R_f + \text{부도스프레드})(1 - t)$$
+
+```{ojs}
+viewof rf = Inputs.range([0, 10], {value: 4.0, step: 0.05, label: "무위험이자율 Rf (%)"})
+viewof erp = Inputs.range([2, 10], {value: 4.6, step: 0.05, label: "주식위험프리미엄 ERP (%)"})
+viewof crp = Inputs.range([0, 10], {value: 0, step: 0.05, label: "국가위험프리미엄 CRP (%)"})
+viewof lambda = Inputs.range([0, 2], {value: 1, step: 0.05, label: "국가위험 노출도 λ"})
+viewof spread = Inputs.range([0, 10], {value: 1.2, step: 0.05, label: "부도스프레드 (%)"})
+```
+
+```{ojs}
+ke = rf + betaL * erp + lambda * crp
+kdPre = rf + spread
+kd = kdPre * (1 - tax / 100)
+html`<div class="calc-result">자기자본비용 kₑ = <strong>${ke.toFixed(2)}%</strong>
+  <span class="muted-note">· 세전 부채비용 ${kdPre.toFixed(2)}% → 세후 ${kd.toFixed(2)}%</span></div>`
+```
+
+## 3. WACC
+
+가중치는 장부가치가 아니라 **시장가치** 기준입니다. 위에서 넣은 D/E로 부채 비중을 계산합니다.
+
+$$\text{WACC} = k_e \frac{E}{D+E} + k_d^{\text{세후}} \frac{D}{D+E}$$
+
+```{ojs}
+wD = (de / 100) / (1 + de / 100)
+wacc = ke * (1 - wD) + kd * wD
+html`<div class="calc-result">WACC = <strong>${wacc.toFixed(2)}%</strong>
+  <span class="muted-note">· 부채 비중 ${(wD * 100).toFixed(1)}%, 자기자본 비중 ${((1 - wD) * 100).toFixed(1)}%</span></div>`
+```
+
+### 부채비율을 바꾸면 WACC는?
+
+부도스프레드는 고정한 채로 레버리지만 바꾼 단순 계산입니다. 실제로는 부채가 늘면 신용등급이 내려가 스프레드도 커집니다(8장).
+
+```{ojs}
+curve = d3.range(0, 151, 5).map(x => {
+  const bl = betaU * (1 + (1 - tax / 100) * x / 100);
+  const w = (x / 100) / (1 + x / 100);
+  return {"D/E (%)": x, WACC: (rf + bl * erp + lambda * crp) * (1 - w) + kd * w, 자기자본비용: rf + bl * erp + lambda * crp};
+})
+Plot.plot({
+  height: 260, x: {label: "D/E (%)"}, y: {label: "%", grid: true},
+  color: {legend: true, domain: ["WACC", "자기자본비용"], range: ["#2f8a80", "#9aa5ab"]},
+  marks: [
+    Plot.line(curve, {x: "D/E (%)", y: "WACC", stroke: () => "WACC", strokeWidth: 2}),
+    Plot.line(curve, {x: "D/E (%)", y: "자기자본비용", stroke: () => "자기자본비용", strokeDasharray: "4 3"}),
+    Plot.dot([{x: de, y: wacc}], {x: "x", y: "y", fill: "#2f8a80", r: 5})
+  ]
+})
+```

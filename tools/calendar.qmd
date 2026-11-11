@@ -1,0 +1,41 @@
+---
+title: "운용 캘린더"
+description: "전략 규칙에서 계산한 다음 리밸런싱·점검 일정"
+toc: false
+---
+
+전략 규칙만으로 날짜를 계산합니다. 시장 데이터나 휴장일 정보는 쓰지 않으므로, 날짜가 주말이나 휴장일이면 다음 거래일에 실행하세요.
+
+```{ojs}
+import {upcoming, fmt, RULES, QUARTERLY} from "../js/schedule.js"
+events = upcoming(new Date(), 12)
+next = RULES.map(r => events.find(e => e.id === r.id)).filter(Boolean)
+```
+
+## 다음 일정
+
+```{ojs}
+html`<div class="stat-strip">${next.map(e => html`<a class="stat-tile" href="../${e.href}">
+  <div class="stat-value">D-${e.days}</div>
+  <div class="stat-label">${e.name}</div>
+  <div class="stat-sub">${fmt(e.date)}${e.weekend ? " · 주말" : ""}</div></a>`)}</div>`
+```
+
+## 앞으로 12개월
+
+```{ojs}
+viewof pick = Inputs.checkbox(RULES.map(r => r.name), {label: "전략", value: RULES.map(r => r.name)})
+```
+
+```{ojs}
+Inputs.table(events.filter(e => pick.includes(e.name)).map(e => ({
+  날짜: fmt(e.date), "남은 날": `D-${e.days}`, 전략: e.name, 메모: e.note + (e.weekend ? " (주말 → 다음 거래일)" : "")
+})), {rows: 30, layout: "auto"})
+```
+
+## 규칙
+
+- **HAA ETF 동적배분**: 매월 마지막 금요일 국내장 아침에 신호를 확인하고 매매. 3·4위 격차 경고가 뜨면 주말에 확정 종가로 다시 확인.
+- **한국 소형주 · 미국 PSR**: 정기보고서 제출 마감 직후 연 4회 (4/1 · 6/17 · 8/17 · 11/17).
+
+일정 규칙은 `js/schedule.js`에서 바꿀 수 있습니다.

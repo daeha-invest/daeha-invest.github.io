@@ -24,6 +24,10 @@ quarto preview
 |---|---|
 | 새 일지 | `./scripts/new_journal.sh` (오늘) / `./scripts/new_journal.sh 2026-11-10 "제목"` |
 | 일지 공개 | 일지 머리말의 `draft: true` 줄 지우기 |
+| 새 투자 가설 | `./scripts/new_hypothesis.sh "가설 한 줄"` (기한 기본 3개월, 두 번째 인자로 지정) |
+| 가설 결과 기록 | 가설 머리말의 `status`를 `맞음`·`틀림`·`보류`로 바꾸고 결과·배운 점 작성 |
+| 용어 추가 | `books/glossary.qmd`에 `### 용어` 한 단락 추가 |
+| 리밸런싱 일정 변경 | `js/schedule.js`의 `RULES`, `QUARTERLY` 수정 (홈 D-day와 운용 캘린더에 반영) |
 | 매매 기록 | `data/trades.csv`에 한 줄 추가 |
 | 자산배분 기록 | `data/allocation.csv`에 날짜별 비중(%) 한 줄 추가 (합계 100) |
 | 전략 수익률 | `data/returns.csv`에 한 줄 추가 |
@@ -58,7 +62,7 @@ quarto preview
 ## 금액 안전장치
 
 - `private/`: 계좌번호, 증권사 정보, 원본 데이터, 원본 노트북. `.gitignore`로 제외됩니다.
-- **pre-commit 훅**: 커밋할 때 `data/`와 `journal/`에서 금액처럼 보이는 패턴을 찾으면 커밋을 멈춥니다.
+- **pre-commit 훅**: 커밋할 때 `data/`, `journal/`, `hypotheses/`에서 금액처럼 보이는 패턴을 찾으면 커밋을 멈춥니다.
   숫자+원·만원·억, `$`·₩, 달러·USD·KRW, `1,234` 같은 쉼표 숫자, 금지된 CSV 열 이름, 100을 넘는 비중 값.
   금액이 아니면 그 줄에 `amount-ok`를 넣으세요 (.qmd는 `<!-- amount-ok -->`).
 - **GitHub Actions**: 같은 검사를 배포 전에 한 번 더 합니다. 걸리면 배포되지 않습니다.
@@ -91,6 +95,9 @@ python3 scripts/sanitize_notebook.py "<원본.ipynb>" strategies/notebooks/portf
 books/        책 노트 (책마다 폴더)
 strategies/   전략 페이지, notebooks/ 공개용 노트북
 journal/      일지 YYYY-MM-DD.qmd
+hypotheses/   투자 가설 YYYY-MM-DD-N.qmd
+tools/        계산기 4종, 운용 캘린더 (브라우저 안에서만 계산)
+js/           운용 일정 규칙 (schedule.js)
 data/         trades.csv, allocation.csv, returns.csv (비중·수익률 %만)
 scripts/      일지 생성, docx 변환, 금액 검사, 노트북 정리
 private/      비공개 (Git 제외)

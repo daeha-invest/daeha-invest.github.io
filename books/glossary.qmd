@@ -1,0 +1,108 @@
+---
+title: "용어집"
+description: "책 노트에 나온 핵심 용어를 한두 줄로 정리하고, 자세한 설명이 있는 장으로 연결합니다."
+toc-depth: 2
+---
+
+검색창(오른쪽 위 돋보기)에서 용어를 찾을 수 있습니다. 괄호 안 숫자는 자세히 다룬 다모다란 *Investment Valuation* 장입니다.
+
+## 가치평가의 기본
+
+### 가격과 가치 (Price vs Value)
+가치는 현금흐름, 성장, 위험으로 정해지고, 가격은 시장 분위기와 수급으로 정해진다. 둘 사이에 차이가 있는지, 그 차이가 좁혀질지가 핵심 질문이다. → [1장](damodaran-iv/ch01.qmd)
+
+### 내재가치 평가 (DCF, Discounted Cash Flow)
+자산의 가치를 그 자산이 만들어 낼 기대 현금흐름을 위험을 반영한 할인율로 할인한 현재가치로 본다. → [2장](damodaran-iv/ch02.qmd) · [계산기](../tools/dcf.qmd)
+
+### 상대가치 평가 (Relative Valuation)
+비슷한 자산의 가격을 PER·PBR·EV/EBITDA 같은 배수로 비교해 가격을 매긴다. 시장 전체가 틀리면 함께 틀린다. → [2장](damodaran-iv/ch02.qmd)
+
+### 고든 성장모형 (Gordon Growth Model)
+영구히 일정하게 자라는 현금흐름의 가치: $V_0 = CF_1/(r-g)$. 성장률이 할인율에 가까울수록 가치가 급격히 커지므로 $g$는 경제 성장률을 넘기 어렵다. → [2장](damodaran-iv/ch02.qmd) · [계산기](../tools/dcf.qmd)
+
+### 잔존가치 (Terminal Value)
+고성장기 이후 안정 성장기 전체의 가치를 한 숫자로 요약한 것. 대부분의 DCF에서 가치의 큰 몫을 차지한다. → [2장](damodaran-iv/ch02.qmd)
+
+### APV (Adjusted Present Value)
+부채가 없을 때의 기업가치에 부채의 절세효과를 더하고 기대 파산비용을 빼서 기업가치를 구하는 방법. → [2장](damodaran-iv/ch02.qmd)
+
+## 재무제표와 이익
+
+### 영업이익 (EBIT)
+매출에서 영업비용을 뺀 이익. 금융비용(이자)과 자본적 지출은 포함하지 않아야 한다. → [3장](damodaran-iv/ch03.qmd) · [9장](damodaran-iv/ch09.qmd)
+
+### 투하자본이익률 (ROIC)
+세후 영업이익 ÷ 투하자본(자기자본 + 부채 − 현금). 세후 영업이익률 × 자본회전율로 나눠 볼 수 있다. 자본비용보다 높아야 성장이 가치를 만든다. → [3장](damodaran-iv/ch03.qmd)
+
+### 자기자본이익률 (ROE)
+순이익 ÷ 자기자본 장부가. 부채를 쓰면 ROIC와 세후 이자율의 차이만큼 확대된다. → [3장](damodaran-iv/ch03.qmd)
+
+### TTM (Trailing 12 Months)
+최근 4개 분기를 합친 매출·이익. 몇 달씩 낡은 연차보고서 대신 최신 숫자로 가치를 평가할 때 쓴다. → [9장](damodaran-iv/ch09.qmd)
+
+### 연구자산 (Research Asset)
+비용 처리된 과거 R&D 중 아직 상각되지 않은 몫을 자산으로 본 것. R&D를 자본화하면 영업이익과 투하자본이 함께 바뀐다. → [9장](damodaran-iv/ch09.qmd)
+
+### 리스 부채 (Lease Debt)
+해지할 수 없는 리스 약정을 세전 부채비용으로 할인한 현재가치. 부채에 더하고, 영업이익은 리스료를 더하고 리스자산 감가상각을 빼서 고친다. → [8장](damodaran-iv/ch08.qmd) · [9장](damodaran-iv/ch09.qmd)
+
+### 이익 관리 (Managed Earnings)
+매출 인식 시점, 비용 분류, 충당금, 대규모 상각 등을 이용해 이익을 매끄럽게 만들거나 추정치를 넘기는 행위. → [9장](damodaran-iv/ch09.qmd)
+
+### 정상화 이익 (Normalized Earnings)
+일회성 항목을 빼고, 출렁이는 이익은 여러 해 평균이나 평균 이익률 × 최근 매출로 바꾼 이익 창출력. → [9장](damodaran-iv/ch09.qmd)
+
+## 위험과 수익
+
+### 분산 가능 위험과 시장위험
+기업 고유 위험은 분산투자로 없앨 수 있어 보상받지 못하고, 분산할 수 없는 시장위험만 기대수익률에 반영된다. → [4장](damodaran-iv/ch04.qmd)
+
+### 베타 (Beta)
+자산 수익률이 시장 수익률에 얼마나 민감한지: $\beta = \mathrm{Cov}(R_i, R_m)/\sigma_m^2$. 1보다 크면 시장보다 크게 움직인다. → [4장](damodaran-iv/ch04.qmd) · [8장](damodaran-iv/ch08.qmd)
+
+### CAPM
+기대수익률 = 무위험이자율 + 베타 × 주식위험프리미엄. 위험 요인이 시장 하나뿐인 모형이다. → [4장](damodaran-iv/ch04.qmd)
+
+### 무부채 베타·레버리지 베타 (Unlevered / Levered Beta)
+사업 위험만 반영한 베타($\beta_U$)에 부채의 효과를 더하면 레버리지 베타: $\beta_L = \beta_U[1 + (1-t)D/E]$. → [8장](damodaran-iv/ch08.qmd) · [계산기](../tools/wacc.qmd)
+
+### 바텀업 베타 (Bottom-up Beta)
+같은 사업을 하는 비교기업들의 무부채 베타 평균에 대상 기업의 레버리지를 입혀 구한 베타. 회귀 베타보다 잡음이 적다. → [8장](damodaran-iv/ch08.qmd)
+
+### 무위험이자율 (Risk-free Rate)
+현금흐름과 같은 통화, 같은 명목·실질 기준의 부도 위험 없는 장기 금리. → [7장](damodaran-iv/ch07.qmd)
+
+### 주식위험프리미엄 (ERP, Equity Risk Premium)
+투자자가 무위험자산 대신 주식을 들고 있는 대가로 요구하는 추가 수익률. 과거 평균, 설문, 내재 프리미엄(현재 지수에서 역산)으로 추정한다. → [7장](damodaran-iv/ch07.qmd)
+
+### 국가위험프리미엄 (CRP, Country Risk Premium)
+위험한 나라에 투자할 때 더하는 프리미엄. 국가 부도스프레드에 주식과 국채의 상대 변동성을 곱해 추정한다. → [7장](damodaran-iv/ch07.qmd)
+
+### 람다 (λ, Lambda)
+기업이 국가위험에 노출된 정도. 자국 매출 비중 등으로 추정하며 1이 평균이다. → [8장](damodaran-iv/ch08.qmd)
+
+### 부도스프레드 (Default Spread)
+같은 만기 무위험 금리 대비 신용위험 때문에 더 내는 금리. 신용등급이나 이자보상배율(합성 등급)로 정한다. → [8장](damodaran-iv/ch08.qmd)
+
+### 자본비용 (WACC)
+자기자본비용과 세후 부채비용을 **시장가치** 비중으로 가중평균한 값. 기업 전체 현금흐름의 할인율이다. → [8장](damodaran-iv/ch08.qmd) · [계산기](../tools/wacc.qmd)
+
+### 효율적 시장 (Efficient Market)
+시장가격이 이용 가능한 정보를 반영해 체계적인 초과수익을 얻기 어려운 상태. 정보의 범위에 따라 약형·준강형·강형으로 나눈다. → [6장](damodaran-iv/ch06.qmd)
+
+### 초과수익 (Excess Return)
+위험을 반영한 기대수익률을 넘는 수익. 시장 효율성 검증과 이벤트 연구의 기본 단위다. → [6장](damodaran-iv/ch06.qmd)
+
+## 옵션
+
+### 콜옵션·풋옵션 (Call / Put)
+정해진 가격(행사가)에 기초자산을 살 권리(콜)와 팔 권리(풋). 만기 가치는 각각 $\max(S-K,0)$, $\max(K-S,0)$. → [5장](damodaran-iv/ch05.qmd)
+
+### 복제 포트폴리오 (Replicating Portfolio)
+기초자산과 무위험 차입·대출을 조합해 옵션과 같은 현금흐름을 만든 것. 이항모형과 블랙-숄즈 모형의 출발점이다. → [5장](damodaran-iv/ch05.qmd)
+
+### 블랙-숄즈 모형 (Black–Scholes)
+연속 시간에서 유럽식 옵션의 가치를 구하는 공식: $C = S\,N(d_1) - Ke^{-rt}N(d_2)$. → [5장](damodaran-iv/ch05.qmd)
+
+### 풋-콜 패리티 (Put–Call Parity)
+같은 행사가·만기의 콜과 풋 사이의 관계: $C - P = S - Ke^{-rt}$. → [5장](damodaran-iv/ch05.qmd)

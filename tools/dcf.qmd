@@ -1,0 +1,92 @@
+---
+title: "DCF·고든 성장 계산기"
+description: "현금흐름, 할인율, 성장률로 가치를 계산 (다모다란 2장)"
+---
+
+현금흐름의 단위는 자유입니다(주당 배당, 주당 FCF, 지수의 현금흐름 등). 결과는 같은 단위로 나옵니다. 관련 내용: [2장 가치평가의 세 가지 접근법](../books/damodaran-iv/ch02.qmd), [7장 위험프리미엄](../books/damodaran-iv/ch07.qmd).
+
+## 1. 고든 성장모형 (안정 성장)
+
+$$V_0 = \frac{CF_1}{r - g}$$
+
+```{ojs}
+viewof cf1 = Inputs.number({value: 100, step: 0.01, label: "다음 해 현금흐름 CF₁"})
+viewof r = Inputs.range([1, 20], {value: 9, step: 0.05, label: "할인율 r (%)"})
+viewof g = Inputs.range([-2, 8], {value: 3, step: 0.05, label: "영구 성장률 g (%)"})
+```
+
+```{ojs}
+gordon = (cf, rr, gg) => rr > gg ? cf / ((rr - gg) / 100) : NaN
+v0 = gordon(cf1, r, g)
+html`<div class="calc-result">${isNaN(v0) ? "할인율이 성장률보다 커야 합니다." :
+  html`가치 V₀ = <strong>${v0.toLocaleString("ko-KR", {maximumFractionDigits: 2})}</strong>
+  <span class="muted-note">· 현금흐름의 ${(v0 / cf1).toFixed(1)}배</span>`}</div>`
+```
+
+### 민감도: r과 g가 조금만 달라져도
+
+```{ojs}
+grid = {
+  const rs = [-1, -0.5, 0, 0.5, 1].map(d => +(r + d).toFixed(2));
+  const gs = [-1, -0.5, 0, 0.5, 1].map(d => +(g + d).toFixed(2));
+  return gs.map(gg => Object.fromEntries([["g \\ r", `${gg}%`], ...rs.map(rr => [`${rr}%`, gordon(cf1, rr, gg)])]));
+}
+Inputs.table(grid, {layout: "auto", format: Object.fromEntries(Object.keys(grid[0]).slice(1).map(k => [k, v => isNaN(v) ? "—" : v.toLocaleString("ko-KR", {maximumFractionDigits: 1})]))})
+```
+
+## 2. 2단계 성장 DCF
+
+처음 $n$년은 높은 성장률 $g_1$, 그 뒤로는 안정 성장률 $g_2$로 영구히 자란다고 봅니다.
+
+$$V_0 = \sum_{t=1}^{n} \frac{CF_0(1+g_1)^t}{(1+r)^t} + \frac{1}{(1+r)^n}\cdot\frac{CF_n(1+g_2)}{r-g_2}$$
+
+```{ojs}
+viewof cf0 = Inputs.number({value: 100, step: 0.01, label: "올해 현금흐름 CF₀"})
+viewof n2 = Inputs.range([1, 15], {value: 5, step: 1, label: "고성장 기간 n (년)"})
+viewof g1 = Inputs.range([-10, 40], {value: 12, step: 0.5, label: "고성장률 g₁ (%)"})
+viewof g2 = Inputs.range([-2, 6], {value: 3, step: 0.1, label: "안정 성장률 g₂ (%)"})
+viewof r2 = Inputs.range([1, 20], {value: 9, step: 0.05, label: "할인율 r (%)"})
+```
+
+```{ojs}
+two = {
+  const R = r2 / 100, G1 = g1 / 100, G2 = g2 / 100;
+  const rows = d3.range(1, n2 + 1).map(t => {
+    const cf = cf0 * (1 + G1) ** t;
+    return {연도: t, 현금흐름: cf, 현재가치: cf / (1 + R) ** t};
+  });
+  const cfn = rows[rows.length - 1].현금흐름;
+  const tv = R > G2 ? cfn * (1 + G2) / (R - G2) : NaN;
+  const pvTv = tv / (1 + R) ** n2;
+  const pvHigh = d3.sum(rows, d => d.현재가치);
+  return {rows, tv, pvTv, pvHigh, total: pvHigh + pvTv};
+}
+html`<div class="calc-result">${isNaN(two.total) ? "할인율이 안정 성장률보다 커야 합니다." : html`
+  가치 V₀ = <strong>${two.total.toLocaleString("ko-KR", {maximumFractionDigits: 2})}</strong>
+  <span class="muted-note">· 고성장기 현재가치 ${(two.pvHigh / two.total * 100).toFixed(0)}% +
+  잔존가치 ${(two.pvTv / two.total * 100).toFixed(0)}%</span>`}</div>`
+```
+
+```{ojs}
+Plot.plot({
+  height: 220, x: {label: "연도"}, y: {label: "현재가치", grid: true},
+  marks: [Plot.barY(two.rows, {x: "연도", y: "현재가치", fill: "#4aaca2"}), Plot.ruleY([0])]
+})
+```
+
+잔존가치 비중이 클수록 가치는 안정 성장률과 할인율 가정에 더 민감해집니다.
+
+## 3. 시장가격이 말해주는 성장률
+
+가격을 알면 고든 모형을 거꾸로 풀어 시장이 가정한 성장률을 구할 수 있습니다: $g = r - CF_1 / P$.
+
+```{ojs}
+viewof price = Inputs.number({value: 2000, step: 0.01, label: "현재 가격 P"})
+viewof cfp = Inputs.number({value: 100, step: 0.01, label: "다음 해 현금흐름 CF₁"})
+viewof rp = Inputs.range([1, 20], {value: 9, step: 0.05, label: "할인율 r (%)"})
+```
+
+```{ojs}
+html`<div class="calc-result">내재 성장률 g = <strong>${(rp - cfp / price * 100).toFixed(2)}%</strong>
+  <span class="muted-note">· 현금흐름 수익률 ${(cfp / price * 100).toFixed(2)}%</span></div>`
+```

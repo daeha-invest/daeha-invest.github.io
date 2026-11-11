@@ -8,6 +8,8 @@ project:
     - "strategies/**/*.qmd"
     - "strategies/notebooks/*.ipynb"
     - "journal/*.qmd"
+    - "hypotheses/*.qmd"
+    - "tools/*.qmd"
     - "!sources/"
     - "!private/"
     - "!README.md"
@@ -17,6 +19,7 @@ project:
     - "data/allocation.csv"
     - "data/returns.csv"
     - "books/progress.json"
+    - "js/*.js"
 
 lang: ko
 
@@ -34,18 +37,63 @@ website:
     logo: images/logo-mark-light.svg
     logo-alt: "Quant & Current 로고"
     left:
-      - href: index.qmd
-        text: 홈
-      - href: books/index.qmd
-        text: 책 노트
-      - href: strategies/index.qmd
-        text: 투자 전략
-      - href: journal/index.qmd
-        text: 투자일지
+      - text: 공부
+        menu:
+          - href: books/index.qmd
+            text: 책 노트
+            icon: book
+          - href: books/damodaran-iv/index.qmd
+            text: "다모다란 Investment Valuation"
+          - href: books/glossary.qmd
+            text: 용어집
+            icon: journal-text
+      - text: 전략
+        menu:
+          - href: strategies/index.qmd
+            text: 전략 한눈에 보기
+            icon: diagram-3
+          - text: "---"
+          - href: strategies/kr-smallcap-value-momentum.qmd
+            text: 한국 소형주 가치+모멘텀
+          - href: strategies/us-psr.qmd
+            text: 미국 PSR
+          - href: strategies/haa-etf.qmd
+            text: HAA ETF 동적배분
+          - text: "---"
+          - href: strategies/notebooks/portfolio-kr-us-stocks.ipynb
+            text: 스크리너 노트북
+      - text: 기록
+        menu:
+          - href: journal/index.qmd
+            text: 투자일지
+            icon: pencil-square
+          - href: hypotheses/index.qmd
+            text: 투자 가설
+            icon: lightbulb
+      - text: 도구
+        menu:
+          - href: tools/index.qmd
+            text: 도구 한눈에 보기
+            icon: tools
+          - text: "---"
+          - href: tools/rebalance.qmd
+            text: 리밸런싱 계산기
+          - href: tools/dcf.qmd
+            text: DCF·고든 성장 계산기
+          - href: tools/wacc.qmd
+            text: WACC 계산기
+          - href: tools/compound.qmd
+            text: 복리·목표 수익률
+          - text: "---"
+          - href: tools/calendar.qmd
+            text: 운용 캘린더
+            icon: calendar3
       - href: dashboard.qmd
         text: 대시보드
   page-footer:
-    center: "개인 공부 기록입니다. 투자 권유가 아니며, 투자 금액은 기록하지 않습니다."
+    left: "**Quant & Current** · 개인 투자 공부 기록"
+    center: "[공부](/books/index.qmd) · [용어집](/books/glossary.qmd) · [전략](/strategies/index.qmd) · [일지](/journal/index.qmd) · [가설](/hypotheses/index.qmd) · [도구](/tools/index.qmd) · [대시보드](/dashboard.qmd)"
+    right: "투자 권유가 아니며, 투자 금액은 기록하지 않습니다."
 
 format:
   html:

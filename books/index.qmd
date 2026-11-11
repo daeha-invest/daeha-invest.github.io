@@ -11,5 +11,7 @@ listing:
   filter-ui: false
 ---
 
+핵심 용어는 [용어집](glossary.qmd)에서 찾아볼 수 있습니다.
+
 새 책을 추가하려면 `books/<책-이름>/` 폴더를 만들고 `index.qmd`와 장별 `chNN.qmd`를 넣으세요.
 docx 노트는 `scripts/docx_to_qmd.py`로 변환할 수 있습니다 (README 참고).

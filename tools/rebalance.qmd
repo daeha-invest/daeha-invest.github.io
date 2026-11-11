@@ -1,0 +1,70 @@
+---
+title: "리밸런싱 계산기"
+description: "현재 비중과 목표 비중(%)으로 사고팔 비중(%p)을 계산"
+toc: false
+---
+
+::: {.callout-note appearance="simple"}
+비중(%)만 다룹니다. 금액 칸은 없고, 입력값은 이 브라우저 안에서만 계산되며 어디에도 저장되지 않습니다.
+:::
+
+```{ojs}
+allocRaw = FileAttachment("../data/allocation.csv").csv()
+latest = allocRaw.length ? [...allocRaw].sort((a, b) => b["날짜"].localeCompare(a["날짜"]))[0] : null
+defaults = latest
+  ? (allocRaw.columns ?? []).filter(c => c !== "날짜").map(k => ({name: k, cur: +latest[k] || 0, tgt: +latest[k] || 0}))
+  : [{name: "주식", cur: 60, tgt: 50}, {name: "채권", cur: 25, tgt: 30}, {name: "금·원자재", cur: 10, tgt: 15}, {name: "현금", cur: 5, tgt: 5}]
+```
+
+```{ojs}
+viewof n = Inputs.range([2, 8], {step: 1, value: defaults.length, label: "자산군 수"})
+viewof band = Inputs.range([0, 10], {step: 0.5, value: 3, label: "허용 범위 (±%p)"})
+```
+
+```{ojs}
+viewof rows = Inputs.form(d3.range(n).map(i => {
+  const d = defaults[i] ?? {name: `자산 ${i + 1}`, cur: 0, tgt: 0};
+  return Inputs.form({
+    name: Inputs.text({value: d.name, width: 120}),
+    cur: Inputs.number([0, 100], {value: d.cur, step: 0.1, width: 80}),
+    tgt: Inputs.number([0, 100], {value: d.tgt, step: 0.1, width: 80})
+  }, {template: ({name, cur, tgt}) => html`<div class="rb-row">${name}<span>현재</span>${cur}<span>목표</span>${tgt}</div>`});
+}))
+```
+
+```{ojs}
+sumCur = d3.sum(rows, r => r.cur)
+sumTgt = d3.sum(rows, r => r.tgt)
+result = rows.map(r => {
+  const diff = +(r.tgt - r.cur).toFixed(2);
+  return {자산군: r.name, "현재(%)": r.cur, "목표(%)": r.tgt, "조정(%p)": diff,
+          판단: Math.abs(diff) <= band ? "유지" : diff > 0 ? "매수" : "매도"};
+})
+```
+
+## 결과
+
+```{ojs}
+html`<p class="${Math.abs(sumCur - 100) > 0.5 || Math.abs(sumTgt - 100) > 0.5 ? "warn-note" : "muted-note"}">
+  합계: 현재 ${sumCur.toFixed(1)}% · 목표 ${sumTgt.toFixed(1)}%
+  ${Math.abs(sumCur - 100) > 0.5 || Math.abs(sumTgt - 100) > 0.5 ? " → 합계가 100%가 되도록 맞춰 주세요." : ""}</p>`
+```
+
+```{ojs}
+Inputs.table(result, {layout: "auto", format: {"조정(%p)": v => (v > 0 ? "+" : "") + v.toFixed(2)}})
+```
+
+```{ojs}
+Plot.plot({
+  height: 40 * result.length + 60, marginLeft: 90,
+  x: {label: "조정 (%p)", grid: true}, y: {label: null},
+  color: {domain: ["매수", "매도", "유지"], range: ["#2f8a80", "#c0504d", "#9aa5ab"], legend: true},
+  marks: [
+    Plot.rectX([{lo: -band, hi: band}], {x1: "lo", x2: "hi", fill: "currentColor", fillOpacity: 0.07}),
+    Plot.barX(result, {x: "조정(%p)", y: "자산군", fill: "판단"}),
+    Plot.ruleX([0])
+  ]
+})
+```
+
+허용 범위 안의 차이는 매매하지 않고 둡니다(거래비용·세금을 줄이는 흔한 방식). 매매한 뒤에는 `data/trades.csv`에 비중 변화(%p)를 기록하세요.

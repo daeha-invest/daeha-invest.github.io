@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SCOPES = ("data/", "journal/")
+SCOPES = ("data/", "journal/", "hypotheses/")
 MARKER = "amount-ok"
 
 PATTERNS = [
